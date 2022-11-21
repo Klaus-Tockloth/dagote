@@ -16,7 +16,7 @@ We inject no 'dot' data into the start template. We load all data (readJSON, rea
 We inject configuration data as 'dot' data into the start template. Data transforming is applied before injection. In other words, the configuration data can be arbitrary JSON, YAML, CSV, CSVMap, Text, Lines, XML or TOML. Within the template set, we process the configuration data, e.g. to load arbitrary data (readJSON, readXML, ...).
 
 **Scenario 3:**
-We inject content data as 'dot' data into the start template. Data transforming is applied before injection. In other words, the content data can be arbitrary JSON, YAML, CSV, CSVMap, Text, Lines, XML or TOML. Within the template set, we process the content data. It is typically not nesseccary to load more data.
+We inject content data as 'dot' data into the start template. Data transforming is applied before injection. In other words, the content data can be arbitrary JSON, YAML, CSV, CSVMap, Text, Lines, XML or TOML. Within the template set, we process the content data. It is typically not necessary to load more data.
 
 ## Functions
 'dagote' provides a rich function set for usage within your template set.
