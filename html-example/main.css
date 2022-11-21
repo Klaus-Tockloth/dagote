@@ -1,0 +1,34 @@
+/* general */
+body {
+   background-color: WhiteSmoke;
+   font-family: verdana;
+   font-size: 0.85em;
+   margin: 1em;
+}
+p {
+   margin-top: 0em;
+   margin-bottom: 0.5em;
+}
+
+/* table */
+table {
+   border-collapse: collapse;
+   border-spacing: 0;
+}
+td {
+   padding: 4px 4px;
+   border-style: solid;
+   border-width: 1px;
+   overflow: hidden;
+   word-break: normal;
+   border-color: LightGray;
+}
+th {
+   padding: 4px 4px;
+   border-style: solid;
+   border-width: 1px;
+   overflow: hidden;
+   word-break: normal;
+   border-color: LightGray;
+   background-color: GhostWhite;
+}

@@ -1,0 +1,273 @@
+/* ------------------------------------------------------------
+
+Purpose:
+- Demonstrates the basic usage of data sources in Go template.
+
+Releases:
+- v1.0.0 - 2022/11/17: initial release
+
+Remarks:
+- white spaces : space, horizontal tab, carriage return, newline
+- '{{- '       : trim all leading white spaces
+- ' -}}'       : trim all trailing white spaces
+
+- General concept:
+  + initial is only an optional string as 'dot' (.) data available
+  + all data has to be loaded dynamically within the template set
+
+- Functions for data loading:
+  + readJSON   : reads JSON from file and unmarshals to 'map of any' (Go: map[string]any)
+	+ readYAML   : reads YAML from file and unmarshals to 'map of any' (Go: map[string]any)
+	+ readCSV    : reads all records of csv file into 'two-dimensional slice of strings' (Go: [][]string)
+	+ readCSVMap : reads all records of csv file into 'slice of maps of strings' (Go: []map[string]string)
+	+ readText   : reads full text file into 'string' (Go: string)
+	+ readLines  : reads all lines of text file into 'slice of strings' (Go: []string)
+  + readXML    : reads XML from file and unmarshals to 'map of any' (Go: map[string]any)
+  + readTOML   : reads TOML from file and unmarshals to 'map of any' (Go: map[string]any)
+
+- Functions for general purposes:
+  + see http://masterminds.github.io/sprig/
+  + see https://pkg.go.dev/text/template
+
+- Functions for basic file handling:
+  + fileExists : checks whether file or directory exists (Go: bool)
+  + fileStat   : returns FileInfo structure (Go: FileInfo {Name, Size, Mode, ModTime, IsDir, Sys})
+	+ fileRead   : reads arbitrary file into 'slice of bytes' (Go: []byte)
+
+- Functions for html templates:
+	+ toTypeHTML : avoids autoescaping of HTML string (Go: template.HTML)
+	+ toTypeCSS  : avoids autoescaping of CSS string (Go: template.CSS)
+	+ toTypeJS   : avoids autoescaping of JS string (Go: template.JS)
+	+ toTypeURL  : avoids autoescaping of URL string (Go: template.URL)
+
+Note: Use of the 'toType' functions presents a security risk. The encapsulated content should
+come from a trusted source, as it will be included verbatim in the template output.
+
+- JSON test data (test.json):
+-----------------------------
+{
+  "name": "John",
+  "age": 30,
+  "sale": true,
+  "employees": [
+    "John",
+    "Anna",
+    "Peter"
+  ],
+  "manager": {
+    "name": "John",
+    "age": 30,
+    "city": "New York"
+  },
+  "middlename": null
+}
+
+- YAML test data (test.yaml):
+-----------------------------  
+# single element
+Enabled: true
+
+# array with map
+Comments:
+- Action: opened
+  Date: 2017/02/15
+  Priority: critical
+- Action: closed
+  Date: 2017/02/11
+  Priority: medium
+
+# map
+CostCenter:
+  Company: ACME Corporation
+  Manager:
+    Email: mario.schulze@googlemail.com
+    GivenName: Mario
+    LastName: Schulze
+  Name: FIDO
+  Number: 4242
+
+# multi line element
+MultilineSingleQuoted: |-
+  Several lines of text, containing 'single quotes'. Escapes (like \n) don't do anything.
+  Newlines can be added by leaving a blank line. Leading whitespace on lines is ignored.
+
+- CSV test data (test.csv):
+---------------------------
+first_name,last_name,username
+"Rob","Pike",rob
+Ken,Thompson,ken
+"Robert","Griesemer","gri"
+
+- Text test data (lorem.txt):
+-----------------------------
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr.
+At vero eos et accusam et justo duo dolores et ea rebum.
+Stet clita kasd gubergren, no sea takimata sanctus.
+
+- XML test data (test.xml):
+---------------------------
+<?xml version="1.0" encoding="UTF-8"?>
+<breakfast_menu>
+  <food>
+    <name>Belgian Waffles</name>
+    <price>5.95</price>
+    <description>Two of our famous Belgian waffles with plenty of real maple syrup.</description>
+  </food>
+  <food>
+    <name>Strawberry Belgian Waffles</name>
+    <price>7.95</price>
+    <description>Light Belgian waffles covered with strawberries and whipped cream.</description>
+  </food>
+  <food>
+    <name>Berry-Berry Belgian Waffles</name>
+    <price>8.95</price>
+    <description>Light Belgian waffles covered with an assortment of fresh berries and whipped cream.</description>
+  </food>
+</breakfast_menu>
+
+- TOML test data (test.toml):
+-----------------------------
+title = "TOML Example"
+
+[owner]
+name = "Tom Preston-Werner"
+dob = 1979-05-27T07:32:00-08:00
+
+[database]
+enabled = true
+ports = [ 8000, 8001, 8002 ]
+data = [ ["delta", "phi"], [3.14] ]
+temp_targets = { cpu = 79.5, case = 72.0 }
+
+[servers]
+[servers.alpha]
+ip = "10.0.0.1"
+role = "frontend"
+[servers.beta]
+ip = "10.0.0.2"
+role = "backend"
+
+Links:
+- https://pkg.go.dev/text/template
+- https://pkg.go.dev/html/template
+- https://pkg.go.dev/fmt
+
+------------------------------------------------------------ */
+
+println "Demonstrates the basic usage of data sources in Go template."
+
+/* read data sources */
+$json := readJSON "test.json"
+$yaml := readYAML "test.yaml"
+$csv := readCSV "test.csv"
+$csvMap := readCSVMap "test.csv"
+$text := readText "lorem.txt"
+$lines := readLines "lorem.txt"
+$bytes := fileRead "lorem.txt"
+$xml := readXML "test.xml"
+$toml := readTOML "test.toml"
+
+/* -------------------- */
+
+println "\nPrint JSON content (single elements) ..."
+printf "name = %v\n" $json.name
+printf "age = %v\n" $json.age
+printf "sale = %v\n" $json.sale
+printf "middlename = %v\n" $json.middlename
+printf "this_does_not_exists = %v\n" $json.this_does_not_exists
+
+println "\nPrint JSON content (employees array) ..."
+range $json.employees
+  printf "%v\n" .
+end
+
+println "\nPrint JSON content (manager object) ..."
+range $key, $value := $json.manager
+  printf "%v = %v\n" $key $value
+end
+
+/* -------------------- */
+
+println "\nPrint YAML content (single elements) ..."
+printf "Enabled = %v\n" $yaml.Enabled
+printf "MultilineSingleQuoted = %v\n" $yaml.MultilineSingleQuoted
+
+println "\nPrint YAML content (array with map) ..."
+range $yaml.Comments
+  printf "%v, %v, %v\n" .Action .Date .Priority
+end
+
+println "\nPrint YAML content (map) ..."
+range $key, $value := $yaml.CostCenter
+  if eq $key "Manager" 
+    printf "Manager = %v, %v, %v\n" $value.Email $value.GivenName $value.LastName
+  else
+    printf "%v = %v\n" $key $value
+  end
+end
+
+/* -------------------- */
+
+println "\nPrint CSV content via 'slice index' (all records) ..."
+range $csv
+  printf "%v, %v, %v\n" (index . 0) (index . 1) (index . 2)
+end
+
+println "\nPrint CSV content via 'field name' (all records) ..."
+range $csvMap
+  printf "%v, %v, %v\n" .first_name .last_name .username
+end
+
+/* -------------------- */
+
+println "\nPrint full text ..."
+printf "%v\n" $text
+
+println "\nPrint text lines ..."
+range $index, $line := $lines
+  printf "%d. %v\n" $index $line
+end
+
+/* -------------------- */
+
+println "\nPrint XML content ..."
+range $key, $value := $xml.food
+  printf "%d. %v, %v €, %v\n" $key $value.name $value.price $value.description
+end
+
+/* -------------------- */
+
+println "\nPrint TOML content ..."
+printf "title = %v\n" $toml.title
+
+range $key, $value := $toml.owner
+  printf "%v = %v\n" $key $value
+end
+
+range $key, $value := $toml.servers
+  printf "%v\n" $key
+  range $k, $v := $value
+    printf "  %v = %v\n" $k $v
+  end
+end
+
+/* -------------------- */
+
+println "\nShow usage of basic file handling functions ..."
+$filename := "test.json" 
+printf "%v exists = %v\n" $filename (fileExists $filename)
+
+$fileinfo := fileStat $filename
+printf "%v has a size of %v bytes\n" $fileinfo.Name $fileinfo.Size
+printf "%v is directory = %v\n" $fileinfo.Name $fileinfo.IsDir
+printf "%v was last modified at %v\n" $fileinfo.Name ($fileinfo.ModTime | date "2006-01-02 - 15:04:05")
+
+println "\nPrint bytes (first 16 bytes only) ..."
+printf "%v\n" (slice $bytes 0 16)
+
+/* -------------------- */
+
+println "\nShow usage of general 'sprig' functions ..."
+printf "SHELL environment variable = %v\n" (env "SHELL")
+printf "Current date = %v\n" (now | date "2006-01-02")
+printf "Current time = %v\n" (now | date "15:04:05")

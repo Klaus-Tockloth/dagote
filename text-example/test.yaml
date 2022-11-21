@@ -1,0 +1,26 @@
+# single element
+Enabled: true
+
+# array with map
+Comments:
+- Action: opened
+  Date: 2017/02/15
+  Priority: critical
+- Action: closed
+  Date: 2017/02/11
+  Priority: medium
+
+# map
+CostCenter:
+  Company: ACME Corporation
+  Manager:
+    Email: mario.schulze@googlemail.com
+    GivenName: Mario
+    LastName: Schulze
+  Name: FIDO
+  Number: 4242
+
+# multi line element
+MultilineSingleQuoted: |-
+  Several lines of text, containing 'single quotes'. Escapes (like \n) don't do anything.
+  Newlines can be added by leaving a blank line. Leading whitespace on lines is ignored.

@@ -1,0 +1,32 @@
+{{/* -----------------------------------------------------------
+Template for visualizing category data (from forum) as HTML page.
+------------------------------------------------------------ */}}
+
+<!doctype html>
+<head>
+   <meta charset='utf-8'>
+   <title>Topics</title>
+   <link rel='stylesheet' href='./main.css'>
+</head>
+<body>
+   <main>
+      <h2>Topics</h2>
+      <table>
+         <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Posts</th>
+         </tr>
+         {{ range .category_pages }}
+            {{ range .topic_list.topics }}
+               <tr>
+                  <td>{{ .id }}</td>
+                  <td>{{ .title }}</td>
+                  <td>{{ .posts_count }}</td>
+               </tr>
+            {{ end }}
+         {{ end }}
+       </table>
+   </main>
+</body>
+</html>

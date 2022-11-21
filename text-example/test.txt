@@ -1,0 +1,84 @@
+Demonstrates the basic usage of data sources in Go template.
+
+Print JSON content (single elements) ...
+name = John
+age = 30
+sale = true
+middlename = <nil>
+this_does_not_exists = <nil>
+
+Print JSON content (employees array) ...
+John
+Anna
+Peter
+
+Print JSON content (manager object) ...
+age = 30
+city = New York
+name = John
+
+Print YAML content (single elements) ...
+Enabled = true
+MultilineSingleQuoted = Several lines of text, containing 'single quotes'. Escapes (like \n) don't do anything.
+Newlines can be added by leaving a blank line. Leading whitespace on lines is ignored.
+
+Print YAML content (array with map) ...
+opened, 2017/02/15, critical
+closed, 2017/02/11, medium
+
+Print YAML content (map) ...
+Company = ACME Corporation
+Manager = mario.schulze@googlemail.com, Mario, Schulze
+Name = FIDO
+Number = 4242
+
+Print CSV content via 'slice index' (all records) ...
+first_name, last_name, username
+Rob, Pike, rob
+Ken, Thompson, ken
+Robert, Griesemer, gri
+
+Print CSV content via 'field name' (all records) ...
+Rob, Pike, rob
+Ken, Thompson, ken
+Robert, Griesemer, gri
+
+Print full text ...
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr.
+At vero eos et accusam et justo duo dolores et ea rebum.
+Stet clita kasd gubergren, no sea takimata sanctus.
+
+Print text lines ...
+0. Lorem ipsum dolor sit amet, consetetur sadipscing elitr.
+1. At vero eos et accusam et justo duo dolores et ea rebum.
+2. Stet clita kasd gubergren, no sea takimata sanctus.
+
+Print XML content ...
+0. Belgian Waffles, 5.95 €, Two of our famous Belgian waffles with plenty of real maple syrup.
+1. Strawberry Belgian Waffles, 7.95 €, Light Belgian waffles covered with strawberries and whipped cream.
+2. Berry-Berry Belgian Waffles, 8.95 €, Light Belgian waffles covered with an assortment of fresh berries and whipped cream.
+
+Print TOML content ...
+title = TOML Example
+dob = 1979-05-27 07:32:00 -0800 -0800
+name = Tom Preston-Werner
+alpha
+  ip = 10.0.0.1
+  role = frontend
+beta
+  ip = 10.0.0.2
+  role = backend
+
+Show usage of basic file handling functions ...
+test.json exists = true
+test.json has a size of 192 bytes
+test.json is directory = false
+test.json was last modified at 2022-11-02 - 09:32:26
+
+Print bytes (first 16 bytes only) ...
+[76 111 114 101 109 32 105 112 115 117 109 32 100 111 108 111]
+
+Show usage of general 'sprig' functions ...
+SHELL environment variable = /bin/zsh
+Current date = 2022-11-19
+Current time = 10:37:56

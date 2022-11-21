@@ -1,0 +1,16 @@
+{
+	"name":"John",
+	"age":30,
+	"sale":true,
+	"employees":[
+	   "John",
+	   "Anna",
+	   "Peter"
+	],
+	"manager":{
+	   "name":"John",
+	   "age":30,
+	   "city":"New York"
+	},
+	"middlename":null
+ }
